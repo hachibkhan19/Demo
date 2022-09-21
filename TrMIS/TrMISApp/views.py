@@ -1,23 +1,25 @@
 from http import server
 from django.shortcuts import render, HttpResponse
-from .serializers import OrganizaionSerializer, EmployeeSerializer
+from .serializers import QuestionSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Organizaion, Employee
+from .models import Question 
 from rest_framework import generics
 
-# Create your views here.
-# class OrganizaionAPIView(APIView):
-#     def get(self,request):
-#         organization = Organizaion.objects.all()
-#         serializer = OrganizaionSerializer(organization, many=True)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
 
-class EmployeeList(generics.ListCreateAPIView):
-    queryset = Employee.objects.all()
-    serializer_class = EmployeeSerializer
 
-class EmployeeDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Employee.objects.all()
-    serializer_class = EmployeeSerializer
+class QuestionView(APIView):
+    def get(self, request):
+        question = Question.objects.all()
+        serializer = QuestionSerializer(question, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        serializer = QuestionSerializer(data=request.data)
+        if serializer.is_valid():
+            question = serializer.save()
+            serializer = QuestionSerializer(question)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

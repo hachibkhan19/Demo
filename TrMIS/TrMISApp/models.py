@@ -1,18 +1,19 @@
 from django.db import models
 
 # Create your models here.
-class Organizaion(models.Model):
-    organization_name = models.CharField(max_length=200, verbose_name='organization name')
-    address = models.CharField(max_length=200, verbose_name='organization address', default='')
-    type = models.CharField(max_length=200, verbose_name='organization type', default='')
+class Question(models.Model):
+    question_text = models.CharField(max_length=200, verbose_name='Question text')
+    pub_date = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='Publication date')
+    author = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.organization_name
+        return self.question_text
 
-class Employee(models.Model):
-    employee_name = models.CharField(max_length=200, verbose_name='employee name')
-    employee_address = models.CharField(max_length=200, verbose_name='employee address')
-    age = models.IntegerField()
-    organization_type = models.ForeignKey(Organizaion, on_delete=models.CASCADE)
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=200, verbose_name='Choice text')
+    votes = models.IntegerField(default=0)
+    
     def __str__(self):
-        return self.employee_name
+        return self.choice_text
+    
