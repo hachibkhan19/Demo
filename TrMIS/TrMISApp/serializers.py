@@ -6,11 +6,9 @@ from .models import Question, Choice
 
 class ChoiceSerializer(serializers.ModelSerializer):
 
-    question_text = serializers.ReadOnlyField(source='question.question_text')
-
     class Meta:
         model = Choice
-        fields = ('id', 'question', 'question_text', 'choice_text', 'votes')
+        fields = ('id', 'choice_text', 'votes')
 
 
 class QuestionSerializer(serializers.ModelSerializer):
