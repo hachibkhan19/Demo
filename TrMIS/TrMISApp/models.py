@@ -1,19 +1,14 @@
-from django.db import models
+from tabnanny import verbose
+from django.db import models  
+  
+class Country(models.Model):  
+    country = models.CharField(max_length=200, unique=True)  
+    slug = models.CharField(max_length=200)
+    iso2 = models.CharField(max_length=200)
 
-# Create your models here.
-class Question(models.Model):
-    question_text = models.CharField(max_length=200, verbose_name='Question text')
-    pub_date = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='Publication date')
-    author = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.question_text
-
-class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200, verbose_name='Choice text')
-    votes = models.IntegerField(default=0)
-    
-    def __str__(self):
-        return self.choice_text
-    
+    class Meta:
+        verbose_name = "Country"
+        verbose_name_plural = "countries"
+  
+    def __str__(self):  
+        return f'{self.country}' 

@@ -1,27 +1,25 @@
-from http import server
-from django.shortcuts import render, HttpResponse
-from .serializers import QuestionSerializer
-from rest_framework.views import APIView
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
+from .models import Country
+import requests
+from .serializers import CountrySerializer
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Question 
-from rest_framework import generics
+from rest_framework.decorators import api_view
 
-
-
-class QuestionView(APIView):
-    def get(self, request):
-        # question = Question.objects.all()
-        # question = Question.objects.select_related()
-        question = Question.objects.prefetch_related('choice_set')
-        serializer = QuestionSerializer(question, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+def country_view(request):
+    response = requests.get("https://api.covid19api.com/countries")
+    datas = response.json()
+    for data in datas:
+        # print(data)
+        country_data = Country(country= data['Country'], slug= data['Slug'], iso2= data['ISO2'])
+        country_data.save()
+        # print(data['Country'])
+    return HttpResponse('hi')
     
-    def post(self, request):
-        serializer = QuestionSerializer(data=request.data)
-        if serializer.is_valid():
-            question = serializer.save()
-            serializer = QuestionSerializer(question)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+def country(request):
+    countries = Country.objects.all()
+    serializer = CountrySerializer(countries, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
