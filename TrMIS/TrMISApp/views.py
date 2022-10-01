@@ -11,7 +11,8 @@ from rest_framework import generics
 
 class QuestionView(APIView):
     def get(self, request):
-        question = Question.objects.all()
+        question = Question.objects.prefetch_related('choices')
+        # question = Question.objects.select_related('choices').all()
         serializer = QuestionSerializer(question, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
