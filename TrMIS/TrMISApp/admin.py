@@ -1,14 +1,13 @@
-from pyexpat import model
 from django.contrib import admin
-from .models import Country
+from .models import Book
 
 # Register your models here.
-class CountryAdmin(admin.ModelAdmin):
-    list_display = ('country', 'slug', 'iso2')
-    ordering = ('country',)
+class BookAdmin(admin.ModelAdmin):
+    list_display = ('title', 'author', 'price')
+    ordering = ('title',)
 
     class Meta:
-        model = Country
+        model = Book
         
 
-admin.site.register(Country, CountryAdmin)
+admin.site.register(Book, BookAdmin)

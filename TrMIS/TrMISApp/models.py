@@ -1,14 +1,14 @@
-from tabnanny import verbose
 from django.db import models  
   
-class Country(models.Model):  
-    country = models.CharField(max_length=200, unique=True)  
-    slug = models.CharField(max_length=200)
-    iso2 = models.CharField(max_length=200)
+class Book(models.Model):  
+    title = models.CharField(max_length=100, unique=True)
+    author = models.CharField(max_length=100)
+    price = models.IntegerField()
+    published_year = models.IntegerField()
 
     class Meta:
-        verbose_name = "Country"
-        verbose_name_plural = "countries"
+        verbose_name = "Book"
+        verbose_name_plural = "Books"
   
     def __str__(self):  
-        return f'{self.country}' 
+        return f'{self.title}' 
