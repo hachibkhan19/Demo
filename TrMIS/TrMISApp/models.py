@@ -1,40 +1,65 @@
 from email.policy import default
-from enum import auto
+from enum import unique
+from pickle import TRUE
+from tabnanny import verbose
 from django.db import models
-from django.contrib.auth.models import User
-from django.utils import timezone
-from requests import delete
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+
+class CustomUserManager(BaseUserManager):
+    
+    def create_user(self, email, first_name, last_name, password=None):
+        if not email:
+            raise ValueError('User must have an email')
+        
+        email = email.lower()
+        first_name = first_name.title()
+        last_name = last_name.title()
+
+        user = self.model(
+            email = self.normalize_email(email),
+            first_name = first_name,
+            last_name = last_name
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    
+    def create_superuser(self, email, first_name, last_name, password=None):
+        user = self.create_user(
+            email=email,
+            first_name=first_name,
+            last_name=last_name,
+            password=password
+        )
+        user.is_admin = True
+        user.is_staff = True
+        user.save(using=self._db)
+        return user
 
 
-class BaseModel(models.Model):
-    created_by = models.CharField(max_length=255)
-    updated_by = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class CustomUser(AbstractBaseUser):
+    email = models.EmailField(max_length=100, unique=True, verbose_name='email')
+    first_name = models.CharField(max_length=100, verbose_name='First Name')
+    last_name = models.CharField(max_length=100, verbose_name='Last Name')
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
 
-    class Meta:
-        abstract = True
-
-class BaseSoftDeleteTableModel(models.Model):
-    is_deleted = models.BooleanField(default=False)
-    deleted_at = models.DateTimeField(null=True)
-    deleted_by = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-
-    class Meta:
-        abstract = True
-
-    def soft_delete(self, user_id=None):
-        self.is_deleted = True
-        self.deleted_by = user_id
-        self.deleted_at = timezone.now()
-        self.save()
-
-
-class Address(BaseModel, BaseSoftDeleteTableModel):
-    state = models.CharField(max_length=10)
-    country = models.CharField(max_length=10)
-    pin_code = models.IntegerField()
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ('first_name', 'last_name')
+    objects = CustomUserManager()
 
     def __str__(self):
-        return self.country
+        return self.email
+    
+    def get_short_name(self):
+        return self.email
+    
+    def has_perm(self, perm, obj=None):
+        return self.is_admin
+    
+    def has_module_perms(self, app_label):
+        return self.is_admin
 
+    class Meta:
+        verbose_name_plural = 'users'

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-w79jze^vsqi+a3tz9=rk&86x!28owx5y#dl4fk3$tf6=27gy_5
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+AUTH_USER_MODEL = 'TrMISApp.CustomUser'
 
 # Application definition
 
