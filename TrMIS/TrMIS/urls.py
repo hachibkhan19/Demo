@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('TrMISApp.urls')),
     # path('courses/', include('courses.urls', namespace='courses')),
+    path('date-time/', include('date_time_Field.urls', namespace='date_time_Field')),
 ]

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'TrMISApp',
     'courses',
+    'date_time_Field',
 ]
 
 MIDDLEWARE = [
