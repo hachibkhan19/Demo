@@ -3,6 +3,9 @@ from pyexpat import model
 from tabnanny import verbose
 from django.db import models
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+from datetime import date
+
 
 # Create your models here.
 class CourseCategory(models.Model):
@@ -28,18 +31,19 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+def no_small_date(value):
+    today = date.today() 
+    if value < today: 
+            raise ValidationError('End Date cannot be small in from course create date.') 
+
 class CourseDetails(models.Model):
     id = models.BigAutoField(primary_key=True, db_column='course_details_id')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, db_column="course_id")
-    start_at = models.DateTimeField()
-    end_at = models.DateTimeField()
+    start_at = models.DateField(help_text="Please enter today's date")
+    end_at = models.DateField(help_text="Please enter end date", validators = [no_small_date])
 
     class Meta:
         db_table = 'course_details'
         
     def __str__(self):
         return self.course.name
-
-class CurrentDate(models.Model):
-    name= models.CharField(max_length=150)
-    currentdate= models.DateField(default=timezone.now)
