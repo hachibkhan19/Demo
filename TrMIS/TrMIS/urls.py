@@ -20,6 +20,8 @@ urlpatterns = [
     path('__debug__/', include('debug_toolbar.urls')),
     path('admin/', admin.site.urls),
     path('', include('TrMISApp.urls')),
-    path('reverse/', include('reverserelation.urls'))
+    path('reverse/', include('reverserelation.urls')),
+    path('multiplemodelquery/', include('multiplemodelquery.urls'))
+
 
 ]

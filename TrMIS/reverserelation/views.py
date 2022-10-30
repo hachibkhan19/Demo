@@ -4,6 +4,6 @@ from .models import Post
 
 # Create your views here.
 def home(request):
-    post = Post.objects.filter(comments_rel=2)
+    post = Post.objects.filter(comments_rel__comment_content='comment-2')
     print(post)
     return HttpResponse('Hi')
