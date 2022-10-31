@@ -21,7 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('TrMISApp.urls')),
     path('reverse/', include('reverserelation.urls')),
-    path('multiplemodelquery/', include('multiplemodelquery.urls'))
-
+    path('multiplemodelquery/', include('multiplemodelquery.urls')),
+    path('attendance/', include('attendance.urls')),
 
 ]

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'TrMISApp',
     'reverserelation',
     'multiplemodelquery',
+    'attendance'
 ]
 
 MIDDLEWARE = [
