@@ -19,7 +19,7 @@ class ParentModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ParentModel
 
-        fields = "__all__"
+        fields = ("id", "parent_name", "year", "child")
 
     def get_child(self, obj):
         child = models.ChildModel.objects.all()
