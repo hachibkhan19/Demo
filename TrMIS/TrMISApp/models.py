@@ -37,4 +37,3 @@ class Address(BaseModel, BaseSoftDeleteTableModel):
 
     def __str__(self):
         return self.country
-

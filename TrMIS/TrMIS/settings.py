@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'TrMISApp',
     'reverserelation',
     'multiplemodelquery',
-    'attendance'
+    'attendance',
+    'inneed',
+    'hyperlinkedmodelserializer',
 ]
 
 MIDDLEWARE = [
